@@ -74,5 +74,29 @@ int main() {
       perror("accept failed");
       continue;
     }
+
+    printf("Client connected from %s:%d\n", inet_ntoa(client_addr.sin_addr),
+           ntohs(client_addr.sin_port));
+
+    char buffer[BUFFER_SIZE];
+    memset(buffer, 0, sizeof(buffer));
+
+    int bytes_read = read(client_fd, buffer, sizeof(buffer) - 1);
+    if (bytes_read <= 0) {
+      close(client_fd);
+      continue;
+    }
+
+    printf("Received: \n%s\n", buffer);
+
+    char response[BUFFER_SIZE + 64];
+    snprintf(response, sizeof(response), "Echo: %s\n", buffer);
+    printf("Echoed back to client\n");
+
+    write(client_fd, response, strlen(response));
+    printf("Echoed back to client\n");
+
+    close(client_fd);
+    printf("Connection closed\n\n");
   }
 }
