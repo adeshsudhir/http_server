@@ -69,6 +69,7 @@ int main() {
 
     printf("Waiting for connection... \n");
 
+    /* accept incoming connections */
     client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &client_len);
     if (client_fd < 0) {
       perror("accept failed");
@@ -78,9 +79,11 @@ int main() {
     printf("Client connected from %s:%d\n", inet_ntoa(client_addr.sin_addr),
            ntohs(client_addr.sin_port));
 
+    /* Store message from the client */
     char buffer[BUFFER_SIZE];
     memset(buffer, 0, sizeof(buffer));
 
+    /* Read the message from the client and store it in buffer */
     int bytes_read = read(client_fd, buffer, sizeof(buffer) - 1);
     if (bytes_read <= 0) {
       close(client_fd);
@@ -89,10 +92,12 @@ int main() {
 
     printf("Received: \n%s\n", buffer);
 
+    /* Response buffer */
     char response[BUFFER_SIZE + 64];
     snprintf(response, sizeof(response), "Echo: %s\n", buffer);
     printf("Echoed back to client\n");
 
+    /* Send response to the client */
     write(client_fd, response, strlen(response));
     printf("Echoed back to client\n");
 
