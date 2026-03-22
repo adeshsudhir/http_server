@@ -1,3 +1,5 @@
+/* server.c */
+
 #include <arpa/inet.h>
 #include <asm-generic/socket.h>
 #include <netinet/in.h>
@@ -49,4 +51,10 @@ int main() {
     exit(1);
   }
   printf("Bound to port %d", PORT);
+
+  if (listen(server_fd, 10)) {
+    perror("listen failed");
+    exit(1);
+  }
+  printf("Listening... test with: nc localhost %d\n\n", PORT);
 }
