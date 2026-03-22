@@ -29,6 +29,7 @@ int main() {
 
   int opt = 1;
 
+  /* Allow to reuse the port quickly */
   setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 
   /* Alloactes memory for storing: IP addr, Port, Addr family */
@@ -45,13 +46,16 @@ int main() {
   /* why htons - converts host byte order -> network byte order (big endian) */
   address.sin_port = htons(PORT);
 
-  /* Assign  socket -> port */
+  /* Attach this socket to port */
+  /* The output will be 0.0.0.0:PORT */
   if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
     perror("bind failed");
     exit(1);
   }
   printf("Bound to port %d", PORT);
 
+  /* Start accepting incoming connection requests */
+  /* here 10 means max 10 pending connections waiting to be accepted */
   if (listen(server_fd, 10)) {
     perror("listen failed");
     exit(1);
