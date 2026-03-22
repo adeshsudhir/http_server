@@ -99,4 +99,6 @@ int main() {
     close(client_fd);
     printf("Connection closed\n\n");
   }
+  close(server_fd);
+  return 0;
 }
