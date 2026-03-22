@@ -61,4 +61,18 @@ int main() {
     exit(1);
   }
   printf("Listening... test with: nc localhost %d\n\n", PORT);
+
+  while (1) {
+    int client_fd;
+    struct sockaddr_in client_addr;
+    socklen_t client_len = sizeof(client_addr);
+
+    printf("Waiting for connection... \n");
+
+    client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &client_len);
+    if (client_fd < 0) {
+      perror("accept failed");
+      continue;
+    }
+  }
 }
